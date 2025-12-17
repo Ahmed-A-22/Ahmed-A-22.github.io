@@ -1,0 +1,231 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Case Study | ShareAware – Consent-Driven Identity Sharing</title>
+
+    <link rel="stylesheet" href="../style.css" />
+  </head>
+
+  <body>
+    <header class="hero">
+      <p class="subtitle"><a href="../index.html">← Back to Portfolio</a></p>
+
+      <h1>ShareAware</h1>
+      <h2>Consent-Driven, Contextual Identity Sharing Platform</h2>
+
+      <p class="summary">
+        ShareAware is a privacy-first identity platform that enables users to
+        manage multiple contextual identities and share them with third-party
+        services using explicit, per-request consent. The system replaces
+        implicit Single-Sign-On with short-lived, cryptographically signed
+        tokens that minimise data exposure and provide full auditability.
+      </p>
+
+      <div class="project-links">
+        <a
+          href="https://github.com/Ahmed-A-22/Identity-Project-Backend"
+          target="_blank"
+          rel="noopener"
+          >Backend Repository</a
+        >
+        <a
+          href="https://github.com/Ahmed-A-22/Identity-Project-Frontend"
+          target="_blank"
+          rel="noopener"
+          >Frontend Repository</a
+        >
+        <a
+          href="https://identity-project-frontend.onrender.com"
+          target="_blank"
+          rel="noopener"
+          >Live Demo</a
+        >
+        <a href="https://youtu.be/GWLT_Sw2iWw" target="_blank" rel="noopener"
+          >Video Walkthrough</a
+        >
+        <a
+          href="../assets/reports/ShareAware_Report.pdf"
+          target="_blank"
+          rel="noopener"
+          >Technical Report (PDF)</a
+        >
+      </div>
+    </header>
+
+    <!-- TECH STACK -->
+    <section class="section">
+      <h3>Tech Stack</h3>
+      <div class="tech-stack">
+        <span>Python</span>
+        <span>Django</span>
+        <span>Django REST Framework</span>
+        <span>JWT (RS256)</span>
+        <span>React (SPA)</span>
+        <span>PostgreSQL</span>
+        <span>AWS RDS</span>
+        <span>Render Deployment</span>
+        <span>OpenAPI / Swagger</span>
+        <span>Automated API Tests</span>
+      </div>
+    </section>
+
+    <!-- PROBLEM -->
+    <section class="section">
+      <h3>1. Problem Statement</h3>
+      <p>
+        Most Single-Sign-On systems treat identity as a single, static entity.
+        In practice, users present different facets of themselves depending on
+        context — professional, personal, or social. Existing federated identity
+        solutions frequently expose more data than necessary and rely on
+        implicit or persistent consent.
+      </p>
+      <p>
+        ShareAware addresses this gap by introducing contextual identities and a
+        consent-driven sharing model that gives users precise control over what
+        data is shared, with whom, and for how long.
+      </p>
+    </section>
+
+    <!-- GOALS -->
+    <section class="section">
+      <h3>2. Goals & Design Objectives</h3>
+      <ul class="project-features">
+        <li>Support multiple contextual identities per user.</li>
+        <li>
+          Require explicit, per-request consent before any data is shared.
+        </li>
+        <li>
+          Minimise data exposure through scoped, short-lived access tokens.
+        </li>
+        <li>Provide a complete audit trail of all identity sharing events.</li>
+        <li>Keep the integration flow simple for third-party services.</li>
+      </ul>
+    </section>
+
+    <!-- SYSTEM OVERVIEW -->
+    <section class="section project">
+      <h3>3. System Overview</h3>
+      <p class="project-description">
+        ShareAware acts as a custom Identity Provider (IdP). Third-party
+        services redirect users to ShareAware when identity access is requested.
+        After authentication, users are shown a clear consent screen that
+        displays exactly what identity data will be shared.
+      </p>
+      <p>
+        Upon approval, ShareAware issues a short-lived, single-use, RS256-signed
+        JWT. This token can be redeemed by the relying party to retrieve only
+        the permitted identity fields. All access is logged and can be reviewed
+        or revoked by the user.
+      </p>
+
+      <img
+        src="../assets/screenshots/auth-flow-diagram.png"
+        alt="Consent-driven identity sharing flow"
+        class="project-image"
+      />
+    </section>
+
+    <!-- TECH DECISIONS -->
+    <section class="section">
+      <h3>4. Key Technical Decisions</h3>
+
+      <h4 class="subheading">Contextual Identity Model</h4>
+      <p>
+        Users can create multiple identities across contexts (e.g. professional,
+        social). Each identity contains optional fields to support data
+        minimisation and is protected by a visibility flag to prevent accidental
+        disclosure.
+      </p>
+
+      <h4 class="subheading">Consent-First Architecture</h4>
+      <p>
+        Identity data is never shared automatically. Every third-party request
+        requires explicit user approval, with a clear breakdown of the fields
+        being requested and the service requesting them.
+      </p>
+
+      <h4 class="subheading">RS256-Signed, Single-Use Tokens</h4>
+      <p>
+        Identity access is granted via RS256-signed JWTs that are short-lived,
+        non-refreshable, and enforced as single-use. Token reuse, replay, and
+        tampering are prevented through server-side validation and logging.
+      </p>
+
+      <h4 class="subheading">Secure Token Handoff</h4>
+      <p>
+        Tokens are delivered to relying parties via HTTPS POST requests rather
+        than URL parameters, reducing the risk of leakage through logs, browser
+        history, or referrer headers.
+      </p>
+    </section>
+
+    <!-- SECURITY -->
+    <section class="section">
+      <h3>5. Security & Privacy</h3>
+      <ul class="project-features">
+        <li>Stateless authentication using JWTs (no cookies or sessions).</li>
+        <li>Explicit consent enforced at both UI and backend levels.</li>
+        <li>Short token TTL and single-use enforcement.</li>
+        <li>Immutable identity snapshots for auditability.</li>
+        <li>Alignment with GDPR principles such as data minimisation.</li>
+      </ul>
+    </section>
+
+    <!-- AUDIT -->
+    <section class="section">
+      <h3>6. Auditability & Revocation</h3>
+      <p>
+        Every consent event generates an immutable snapshot of the shared
+        identity data and a corresponding audit record. Users can review past
+        access grants and revoke unused tokens at any time, ensuring
+        transparency and control.
+      </p>
+    </section>
+
+    <!-- TESTING -->
+    <section class="section">
+      <h3>7. Testing & Evaluation</h3>
+      <ul class="project-features">
+        <li>
+          Automated API tests covering identity CRUD, consent, and token
+          lifecycle.
+        </li>
+        <li>Negative testing for token replay, tampering, and revocation.</li>
+        <li>
+          Two rounds of usability testing (SUS), achieving a final mean score of
+          <strong>86.07</strong> (excellent usability).
+        </li>
+      </ul>
+    </section>
+
+    <!-- TRADEOFFS -->
+    <section class="section">
+      <h3>8. Challenges & Trade-offs</h3>
+      <ul class="project-features">
+        <li>
+          Relying parties are not pre-registered, increasing phishing risk.
+        </li>
+        <li>Token TTL selected pragmatically rather than empirically.</li>
+        <li>
+          Snapshot design balances audit accuracy against media storage costs.
+        </li>
+      </ul>
+    </section>
+
+    <!-- FUTURE -->
+    <section class="section">
+      <h3>9. Future Improvements</h3>
+      <ul class="project-features">
+        <li>Relying-party registration and callback URI validation.</li>
+        <li>Field-level consent and visibility controls.</li>
+        <li>OAuth 2.0 / OpenID Connect compatibility layer.</li>
+        <li>Multi-factor authentication and account recovery.</li>
+        <li>Enhanced observability and monitoring.</li>
+      </ul>
+    </section>
+
+    <script src="../components/footer.js"></script>
+  </body>
+</html>

@@ -1,0 +1,263 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Case Study | Real-Time E-Learning Platform</title>
+
+    <link rel="stylesheet" href="../style.css" />
+  </head>
+
+  <body>
+    <header class="hero">
+      <p class="subtitle"><a href="../index.html">← Back to Portfolio</a></p>
+
+      <h1>Real-Time E-Learning Platform</h1>
+      <h2>Live Communication, Role-Based Access, and Course Management</h2>
+
+      <p class="summary">
+        A full-stack e-learning platform built with Django and WebSockets,
+        enabling teachers and students to interact in real time through chat,
+        notifications, and structured course workflows. The system was designed
+        with clear role-based access control, modular architecture, and
+        production deployment in mind.
+      </p>
+
+      <div class="project-links">
+        <a
+          href="https://github.com/Ahmed-A-22/elearning-platform"
+          target="_blank"
+          rel="noopener"
+          >GitHub Repository</a
+        >
+        <a
+          href="https://elearning-platform-yq1u.onrender.com"
+          target="_blank"
+          rel="noopener"
+          >Live Demo</a
+        >
+        <a
+          href="https://www.youtube.com/watch?v=rC1-WwJ1MbE"
+          target="_blank"
+          rel="noopener"
+          >Video Walkthrough</a
+        >
+      </div>
+    </header>
+
+    <!-- TECH STACK -->
+    <section class="section">
+      <h3>Tech Stack</h3>
+      <div class="tech-stack">
+        <span>Python 3.11</span>
+        <span>Django 4.2</span>
+        <span>Django REST Framework</span>
+        <span>Django Channels</span>
+        <span>WebSockets</span>
+        <span>Redis</span>
+        <span>PostgreSQL</span>
+        <span>Bootstrap 5</span>
+        <span>Swagger / OpenAPI</span>
+        <span>Google Cloud Storage</span>
+        <span>Whitenoise</span>
+        <span>Render Deployment</span>
+        <span>Automated Tests (111)</span>
+      </div>
+    </section>
+
+    <!-- PROBLEM -->
+    <section class="section">
+      <h3>1. Problem Statement</h3>
+      <p>
+        Many e-learning platforms provide structured course content but lack
+        effective real-time interaction and fine-grained access control.
+        Communication is often handled through external tools, leading to
+        fragmented workflows and reduced engagement between teachers and
+        students.
+      </p>
+      <p>
+        This project aimed to design and implement an integrated e-learning
+        system that combines course management with real-time communication,
+        while enforcing clear role-based permissions and ownership constraints
+        across the platform.
+      </p>
+    </section>
+
+    <!-- GOALS -->
+    <section class="section">
+      <h3>2. Goals & Design Objectives</h3>
+      <ul class="project-features">
+        <li>
+          Support two explicit user roles (teacher and student) with distinct
+          permissions.
+        </li>
+        <li>
+          Enable real-time chat and notifications using WebSocket-based
+          communication.
+        </li>
+        <li>
+          Allow teachers to create, manage, and control access to courses and
+          learning materials.
+        </li>
+        <li>
+          Allow students to enroll in courses, provide feedback, and interact
+          directly with instructors.
+        </li>
+        <li>
+          Enforce object-level ownership and access control across all
+          resources.
+        </li>
+        <li>
+          Deliver a production-ready system supported by automated testing and
+          cloud-based storage.
+        </li>
+      </ul>
+    </section>
+
+    <!-- SYSTEM OVERVIEW -->
+    <section class="section project">
+      <h3>3. System Overview</h3>
+      <p class="project-description">
+        The platform is implemented as a modular Django application composed of
+        dedicated apps for users, courses, chat, notifications, shared
+        utilities, and a REST API layer. This separation of concerns improves
+        maintainability and allowed each subsystem to be developed, tested, and
+        evolved independently.
+      </p>
+
+      <img
+        src="../assets/screenshots/full_erd.png"
+        alt="E-learning platform entity-relationship diagram"
+        class="project-image"
+      />
+    </section>
+
+    <!-- KEY TECH DECISIONS -->
+    <section class="section">
+      <h3>4. Key Technical Decisions</h3>
+
+      <h4 class="subheading">Custom User Model and Role Handling</h4>
+      <p>
+        Rather than relying on Django’s Groups framework, the system implements
+        a custom user model with a <code>user_type</code> attribute to
+        distinguish between students and teachers. This approach enables
+        efficient role checks, simpler queries, and explicit permission logic at
+        the view level.
+      </p>
+
+      <h4 class="subheading">Explicit View-Level Access Control</h4>
+      <p>
+        Role-based and object-level permissions are enforced directly within
+        views to ensure users can only access or modify resources they own or
+        are authorised to interact with. This prevents common issues such as
+        students modifying course content or teachers accessing unrelated data.
+      </p>
+
+      <h4 class="subheading">Real-Time Features via Django Channels</h4>
+      <p>
+        Real-time chat and notifications are implemented using Django Channels
+        and WebSockets. Messages and notifications are persisted in the
+        database, while WebSockets provide immediate delivery to connected
+        clients.
+      </p>
+
+      <h4 class="subheading">Relational Database Design</h4>
+      <p>
+        The database schema was designed to satisfy BCNF, using join tables for
+        many-to-many relationships such as enrollments. A constrained one-to-one
+        chat model was selected to simplify message routing and ensure
+        consistent performance.
+      </p>
+    </section>
+
+    <!-- SECURITY -->
+    <section class="section">
+      <h3>5. Security & Access Control</h3>
+      <ul class="project-features">
+        <li>Secure authentication using Django’s password hashing.</li>
+        <li>CSRF protection and ORM-level safeguards against SQL injection.</li>
+        <li>Strict role-based and ownership-based permission checks.</li>
+        <li>
+          Custom 403 responses to provide meaningful access-denied feedback.
+        </li>
+        <li>HTTPS enforced in production through the hosting platform.</li>
+      </ul>
+    </section>
+
+    <!-- REAL TIME -->
+    <section class="section">
+      <h3>6. Real-Time Communication</h3>
+      <p>
+        The chat system supports private, one-to-one conversations between
+        users. A unique constraint ensures that no duplicate chat sessions can
+        exist between the same pair of users, while deterministic room naming
+        ensures consistent WebSocket connections.
+      </p>
+      <p>
+        Notifications are delivered in real time and stored persistently,
+        allowing users to retrieve, review, or delete them through the REST API.
+      </p>
+    </section>
+
+    <!-- TESTING -->
+    <section class="section">
+      <h3>7. Testing & Reliability</h3>
+      <ul class="project-features">
+        <li>
+          A suite of 111 automated tests covering users, courses, chat,
+          notifications, and API endpoints.
+        </li>
+        <li>
+          Comprehensive coverage of authentication and permission edge cases.
+        </li>
+        <li>Validation of notification lifecycles and real-time behaviour.</li>
+        <li>
+          High confidence in system stability prior to production deployment.
+        </li>
+      </ul>
+    </section>
+
+    <!-- DEPLOYMENT -->
+    <section class="section">
+      <h3>8. Deployment & Execution</h3>
+      <p>
+        The application is deployed on Render with PostgreSQL and Redis in
+        production. Static assets are served using Whitenoise, while
+        user-uploaded media is stored in Google Cloud Storage. Sensitive
+        configuration values are managed via environment variables.
+      </p>
+    </section>
+
+    <!-- TRADEOFFS -->
+    <section class="section">
+      <h3>9. Challenges & Trade-offs</h3>
+      <ul class="project-features">
+        <li>Cold-start delays caused by free-tier hosting spin-down.</li>
+        <li>
+          Chat functionality limited to private conversations rather than group
+          discussions.
+        </li>
+        <li>
+          A deliberately minimal UI to prioritise backend correctness and system
+          behaviour.
+        </li>
+      </ul>
+    </section>
+
+    <!-- FUTURE -->
+    <section class="section">
+      <h3>10. Future Improvements</h3>
+      <ul class="project-features">
+        <li>Support for group chat and discussion forums.</li>
+        <li>
+          Additional real-time features such as shared calendars or whiteboards.
+        </li>
+        <li>Third-party authentication using OAuth2.</li>
+        <li>Caching of frequently accessed API endpoints.</li>
+        <li>Incremental UI and UX enhancements.</li>
+      </ul>
+    </section>
+
+    <script src="../components/footer.js"></script>
+  </body>
+</html>
